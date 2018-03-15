@@ -1,0 +1,63 @@
+{% extends "PgGsbFraisBundle::accueil.html.twig" %}
+
+{% block body %}
+    <div id="contenu">
+        <h2>Liste de tous les visiteurs</h2>
+        <form method="post">
+            <select name="visiteur_id">
+                {% for unVisiteur in lesVisiteurs %}
+                    {% if unVisiteur.nom != "admin" %}
+                        <option value="{{ unVisiteur.id }}"> {{ unVisiteur.nom }} {{ unVisiteur.prenom }} </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit">Valider</button>
+        </form>
+    </div>
+
+    {% if ficheFrais_visiteur %}
+        <div id="contenu">
+            {% for i, ficheFrais in ficheFrais_visiteur %}
+                {% if not i %}
+                    <h2>Fiche frais de {{ ficheFrais.nom }} {{ ficheFrais.prenom }}</h2>
+                {% endif %}
+            {% endfor %}
+            <table style="width:100%">
+                <tr>
+                    <th>Mois</th>
+                    <th>Nombre de justificatifs</th>
+                    <th>Montant</th>
+                    <th>Etat actuelle</th>
+                    <th>Nouvelle etat</th>
+                </tr>   
+                {% for ficheFrais in ficheFrais_visiteur %}
+                    <form method="post">
+                        <input name="visiteur_id" value="{{ visiteur_id }}" style="display:none">
+                        <input name="change_ficheFrais" value="1" style="display:none">
+                        <tr>
+                            <td style="text-align:center">
+                                <input value="{{ ficheFrais.mois }}" name="mois_ficheFrais" style="display:none">
+                                {{ ficheFrais.mois|slice(0, 4) }} / {{ ficheFrais.mois|slice(4, 6) }}
+                            </td>
+                            <td style="text-align:center">{{ ficheFrais.nbjustificatifs }}</td>
+                            <td style="text-align:center">{{ ficheFrais.montantvalide }}</td>
+                            <td style="text-align:center">{{ ficheFrais.libelle }}</td>
+                            <td style="text-align:center">
+                                <select name="etat_id">
+                                    {% for unEtat in lesEtats %}
+                                        <option value="{{ unEtat.id }}"> 
+                                            {{ unEtat.libelle }} 
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Valider</button>
+                            </td>
+                        </tr>
+                    </form>
+                {% endfor %}
+            </table>
+
+        </div>
+    {% endif %}
+
+{% endblock %}

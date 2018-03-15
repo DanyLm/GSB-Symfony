@@ -1,0 +1,10 @@
+parameters:
+    db.host: mysql:host=localhost
+    db.name: dbname=symfony_lsw
+    db.user: user
+    db.mdp:  user
+services:
+    pg_gsb_frais.pdo:
+        class: Pg\GsbFraisBundle\services\PdoGsb
+        arguments: [%db.host%,%db.name%,%db.user%,%db.mdp%]
+
